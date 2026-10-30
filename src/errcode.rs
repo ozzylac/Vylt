@@ -25,6 +25,7 @@ pub const CATALOG: &[(&str, &str)] = &[
     ("SV-E60", "browser-extension installation failed"),
     ("SV-E61", "Windows passkey-provider registration failed"),
     ("SV-E70", "Have I Been Pwned check failed (network)"),
+    ("SV-E80", "update check failed (network)"),
     ("SV-E90", "unexpected error"),
 ];
 
@@ -47,6 +48,7 @@ pub fn message(code: &str) -> &'static str {
         "SV-E60" => tr("Installation de l'extension impossible."),
         "SV-E61" => tr("Enregistrement du fournisseur Windows impossible."),
         "SV-E70" => tr("Vérification des fuites impossible (réseau)."),
+        "SV-E80" => tr("Impossible de vérifier les mises à jour."),
         _ => tr("Erreur inattendue."),
     }
 }

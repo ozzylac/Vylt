@@ -15,6 +15,7 @@ mod pwgen;
 mod session;
 mod strings;
 mod theme;
+mod update;
 mod ui_auth;
 mod ui_common;
 mod ui_digicode;

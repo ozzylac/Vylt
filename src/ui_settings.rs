@@ -125,6 +125,7 @@ pub fn settings_tab(ui: &mut egui::Ui, s: &mut Session, cfg: &mut Config, lock: 
                     Section::Master => {
                         password_card(ui, s, cfg);
                         info_card(ui, s, lock);
+                        update_card(ui);
                     }
                     Section::Tfa => tfa_card(ui, s),
                     Section::Hidden => hidden_card(ui, s),
@@ -1523,6 +1524,43 @@ fn info_card(ui: &mut egui::Ui, s: &mut Session, lock: &mut bool) {
         }
         if ui.button(tr("Verrouiller maintenant")).clicked() {
             *lock = true;
+        }
+    });
+}
+
+fn update_card(ui: &mut egui::Ui) {
+    use crate::update::{self, Status};
+    theme::card(ui, |ui| {
+        theme::heading(ui, tr("Mises à jour"));
+        theme::label(ui, &format!("{} : {}", tr("Version installée"), update::current()));
+        theme::label(ui, tr("Vylt ne se met pas à jour tout seul. La vérification est manuelle et n'interroge GitHub que pour comparer le numéro de version ; aucune donnée personnelle n'est envoyée."));
+        let running = update::is_running();
+        ui.add_enabled_ui(!running, |ui| {
+            if theme::primary(ui, tr("Rechercher les mises à jour")).clicked() {
+                update::check(ui.ctx());
+            }
+        });
+        if running {
+            theme::label(ui, tr("Vérification…"));
+        }
+        match update::status() {
+            Status::Idle => {}
+            Status::UpToDate => {
+                ui.label(RichText::new(tr("Vous avez la dernière version.")).color(theme::ok()));
+            }
+            Status::Newer(r) => {
+                ui.label(RichText::new(format!("{} {}", tr("Nouvelle version disponible :"), r.version)).color(theme::accent()));
+                if !r.url.is_empty() {
+                    ui.hyperlink_to(tr("Télécharger"), &r.url);
+                }
+                if !r.notes.trim().is_empty() {
+                    theme::label(ui, tr("Notes"));
+                    ui.label(r.notes.trim());
+                }
+            }
+            Status::Error(e) => {
+                ui.label(RichText::new(e).color(theme::danger()));
+            }
         }
     });
 }

@@ -574,6 +574,16 @@ pub static TABLE: &[(&str, &str, &str)] = &[
     // --- settings: files
     ("Fichiers de ce profil", "Files of this profile", "Archivos de este perfil"),
     ("Sans la clé secrète ET le mot de passe maître, le coffre est indéchiffrable. Conservez une copie de la clé hors ligne.", "Without the secret key AND the master password, the vault cannot be decrypted. Keep an offline copy of the key.", "Sin la clave secreta Y la contraseña maestra, la caja fuerte no se puede descifrar. Guarde una copia de la clave sin conexión."),
+    // --- settings: updates
+    ("Mises à jour", "Updates", "Actualizaciones"),
+    ("Version installée", "Installed version", "Versión instalada"),
+    ("Vylt ne se met pas à jour tout seul. La vérification est manuelle et n'interroge GitHub que pour comparer le numéro de version ; aucune donnée personnelle n'est envoyée.", "Vylt does not update itself. The check is manual and only asks GitHub to compare the version number; no personal data is sent.", "Vylt no se actualiza solo. La comprobación es manual y solo consulta a GitHub para comparar el número de versión; no se envía ningún dato personal."),
+    ("Rechercher les mises à jour", "Check for updates", "Buscar actualizaciones"),
+    ("Vérification…", "Checking…", "Comprobando…"),
+    ("Vous avez la dernière version.", "You have the latest version.", "Tiene la última versión."),
+    ("Nouvelle version disponible :", "New version available:", "Nueva versión disponible:"),
+    ("Télécharger", "Download", "Descargar"),
+    ("Impossible de vérifier les mises à jour.", "Could not check for updates.", "No se pudieron comprobar las actualizaciones."),
 ];
 
 #[cfg(test)]
