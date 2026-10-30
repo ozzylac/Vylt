@@ -6,7 +6,7 @@
 
 Escrito en Rust para Windows 11 · Interfaz en francés, inglés y español.
 
-[Français](README.md) · [English](README.en.md) · **Español**
+[Français](README.fr.md) · [English](README.md) · **Español**
 
 </div>
 
