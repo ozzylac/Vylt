@@ -58,11 +58,13 @@ pub fn lock_error(k: LockKind) -> &'static str {
     }
 }
 
-pub fn strength(bits: f32) -> (&'static str, Color32) {
-    match bits {
-        b if b < 45.0 => (tr("faible"), theme::danger()),
-        b if b < 65.0 => (tr("moyenne"), theme::dim()),
-        b if b < 90.0 => (tr("forte"), theme::ok()),
+/// Label and colour for a zxcvbn score (0..=4).
+pub fn strength(score: u8) -> (&'static str, Color32) {
+    match score {
+        0 => (tr("très faible"), theme::danger()),
+        1 => (tr("faible"), theme::danger()),
+        2 => (tr("moyenne"), theme::dim()),
+        3 => (tr("forte"), theme::ok()),
         _ => (tr("excellente"), theme::ok()),
     }
 }

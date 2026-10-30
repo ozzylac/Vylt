@@ -7,7 +7,6 @@ use vylt::health;
 
 use crate::config::now_secs;
 use crate::i18n::tr;
-use crate::pwgen;
 use crate::session::*;
 use crate::theme;
 
@@ -49,10 +48,9 @@ pub fn health_tab(ui: &mut egui::Ui, s: &mut Session) {
             hidden.insert(i);
             continue;
         }
-        let bits = format!("{:.0}", pwgen::bits(&entries[i].password));
         rows.push(Row {
             entry: i,
-            text: tr("Mot de passe faible : {bits} bits, facile à deviner").replace("{bits}", &bits),
+            text: tr("Mot de passe faible : facile à deviner").to_owned(),
             risky: true,
         });
     }

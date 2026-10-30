@@ -1204,7 +1204,7 @@ fn transfer_card(ui: &mut egui::Ui, s: &mut Session, lock: &mut bool) {
                 let dest_path = Path::new(&dest);
                 let checks = [
                     (x.pass.chars().count() >= transfer::MIN_PASSPHRASE_CHARS, tr("20 caractères minimum")),
-                    (pwgen::bits(&x.pass) >= 90.0, tr("Robustesse d'au moins 90 bits")),
+                    (pwgen::score(&x.pass) >= 4, tr("Robustesse maximale (Excellente)")),
                     (!x.pass.is_empty() && *x.pass == *x.pass2, tr("Les deux passphrases sont identiques")),
                     (*x.pass != *x.pw, tr("Différente du mot de passe maître")),
                     (!dest_path.exists() && dest_path.parent().is_some_and(|p| p.as_os_str().is_empty() || p.exists()), tr("Destination valide (le fichier n'existe pas encore)")),

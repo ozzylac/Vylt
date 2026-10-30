@@ -256,7 +256,7 @@ fn detail_ui(ui: &mut egui::Ui, s: &mut Session, i: usize) -> bool {
             if ui.add(egui::Label::new(toggle).sense(egui::Sense::click())).clicked() {
                 s.reveal_pw = !s.reveal_pw;
             }
-            let (txt, col) = strength(pwgen::bits(&e.password));
+            let (txt, col) = strength(pwgen::score(&e.password));
             ui.label(RichText::new(format!("{} {txt}", tr("Robustesse"))).size(12.0).color(col));
         });
     });
@@ -439,7 +439,7 @@ fn edit_ui(ui: &mut egui::Ui, s: &mut Session) {
         ui.add(egui::TextEdit::singleline(&mut ed.entry.username).desired_width(f32::INFINITY));
         theme::label(ui, tr("Mot de passe"));
         ui.add(egui::TextEdit::singleline(&mut ed.entry.password).password(!ed.reveal).desired_width(f32::INFINITY));
-        let (txt, col) = strength(pwgen::bits(&ed.entry.password));
+        let (txt, col) = strength(pwgen::score(&ed.entry.password));
         ui.label(RichText::new(format!("{} : {txt}", tr("Robustesse"))).size(12.0).color(col));
         ui.horizontal_wrapped(|ui| {
             ui.checkbox(&mut ed.reveal, tr("Afficher"));

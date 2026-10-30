@@ -35,7 +35,7 @@ pub fn password(len: usize, symbols: bool) -> String {
     String::from_utf8(out).expect("ascii")
 }
 
-pub use vylt::health::bits;
+pub use vylt::health::score;
 
 #[cfg(test)]
 mod tests {

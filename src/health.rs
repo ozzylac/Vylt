@@ -6,27 +6,26 @@ use sha2::{Digest, Sha256};
 
 use crate::vault::Entry;
 
-pub const WEAK_BITS: f32 = 45.0;
 pub const OLD_AFTER_SECS: u64 = 365 * 24 * 3600;
 
-const SYMBOLS: &str = "!@#$%^&*()-_=+[]{};:,.?/";
+/// Below this score a password is treated as weak. zxcvbn's scores: 0 too guessable, 1 very
+/// guessable, 2 somewhat guessable, 3 safely unguessable, 4 very unguessable.
+pub const WEAK_SCORE: u8 = 3;
 
-/// Rough entropy estimate in bits (length * log2(alphabet size)); ignores dictionary patterns.
-pub fn bits(p: &str) -> f32 {
-    let mut pool = 0u32;
-    if p.chars().any(|c| c.is_ascii_lowercase()) {
-        pool += 26;
+/// Real strength estimate (0..=4) via zxcvbn: it accounts for repeats ("aaaa…"), sequences
+/// ("azerty", "1234"), common words, dates and l33t — not just length and alphabet size. Empty is
+/// 0, and very long inputs are capped (they already max out) to keep the estimate quick.
+pub fn score(p: &str) -> u8 {
+    if p.is_empty() {
+        return 0;
     }
-    if p.chars().any(|c| c.is_ascii_uppercase()) {
-        pool += 26;
-    }
-    if p.chars().any(|c| c.is_ascii_digit()) {
-        pool += 10;
-    }
-    if p.chars().any(|c| !c.is_ascii_alphanumeric()) {
-        pool += SYMBOLS.len() as u32 + 8;
-    }
-    if pool == 0 { 0.0 } else { p.chars().count() as f32 * (pool as f32).log2() }
+    let capped: String = p.chars().take(64).collect();
+    u8::from(zxcvbn::zxcvbn(&capped, &[]).score())
+}
+
+/// A password whose estimated strength is below `WEAK_SCORE`.
+pub fn is_weak(p: &str) -> bool {
+    score(p) < WEAK_SCORE
 }
 
 #[derive(Debug, Default, PartialEq)]
@@ -48,7 +47,7 @@ pub fn analyze(entries: &[Entry], now: u64) -> Report {
             r.empty.push(i);
             continue;
         }
-        if bits(&e.password) < WEAK_BITS {
+        if is_weak(&e.password) {
             r.weak.push(i);
         }
         if e.updated != 0 && now.saturating_sub(e.updated) > OLD_AFTER_SECS {
@@ -103,9 +102,14 @@ mod tests {
     }
 
     #[test]
-    fn bits_grow_with_length_and_alphabet() {
-        assert!(bits("aaaa") < bits("aaaaaaaa"));
-        assert!(bits("aaaaaaaa") < bits("aAaAaAa1"));
-        assert_eq!(bits(""), 0.0);
+    fn score_sees_through_repeats_and_patterns() {
+        // The whole point: a long run of one character is NOT strong.
+        assert!(is_weak(&"a".repeat(150)), "150 identical chars must be weak");
+        assert!(is_weak("azertyuiop"), "keyboard sequence is weak");
+        assert!(is_weak("Password123"), "a common word with digits is weak");
+        assert_eq!(score(""), 0);
+        // A genuinely unpredictable passphrase scores high.
+        assert!(!is_weak("Str0ng!Passw0rd#2026xyz"));
+        assert!(score("7h!Kq2$wVdLm9@zF") >= WEAK_SCORE);
     }
 }

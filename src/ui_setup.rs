@@ -131,14 +131,9 @@ fn rail(ui: &mut egui::Ui, w: &mut Setup, cfg: &mut Config) -> Option<Screen> {
 }
 
 fn strength_bar(ui: &mut egui::Ui, pw: &str) {
-    let bits = pwgen::bits(pw);
-    let (txt, col) = strength(bits);
-    let filled = match bits {
-        b if b < 45.0 => 1,
-        b if b < 65.0 => 2,
-        b if b < 90.0 => 3,
-        _ => 4,
-    };
+    let sc = pwgen::score(pw);
+    let (txt, col) = strength(sc);
+    let filled = (sc as usize).max(1); // even the weakest shows one lit segment
     let (rect, _) = ui.allocate_exact_size(Vec2::new(ui.available_width(), 4.0), egui::Sense::hover());
     let seg = (rect.width() - 12.0) / 4.0;
     for i in 0..4 {
@@ -147,7 +142,7 @@ fn strength_bar(ui: &mut egui::Ui, pw: &str) {
     }
     if !pw.is_empty() {
         ui.horizontal(|ui| {
-            ui.label(RichText::new(format!("{} {txt} · ~{bits:.0} bits", tr("Robustesse"))).size(12.0).color(col));
+            ui.label(RichText::new(format!("{} {txt}", tr("Robustesse"))).size(12.0).color(col));
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                 theme::label(ui, &tr("{n} caractères").replace("{n}", &pw.chars().count().to_string()));
             });
@@ -517,7 +512,7 @@ pub fn setup_ui(ui: &mut egui::Ui, cfg: &mut Config, sel: &mut usize, w: &mut Se
                         ui.label(theme::bold(tr("Récapitulatif")));
                         ui.add_space(4.0);
                         summary_row(ui, tr("Profil"), RichText::new(w.name.trim()));
-                        let (txt, _) = strength(pwgen::bits(&w.pw));
+                        let (txt, _) = strength(pwgen::score(&w.pw));
                         summary_row(
                             ui,
                             tr("Mot de passe maître"),
