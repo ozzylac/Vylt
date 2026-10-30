@@ -4,7 +4,7 @@
 #
 #   powershell -ExecutionPolicy Bypass -File installer\msix\build.ps1
 #
-# Output: target\installer\Vylt-0.1.0.0.msix (+ Vylt-selfsign.cer the first time).
+# Output: target\installer\Vylt-0.1.1.0.msix (+ Vylt-selfsign.cer the first time).
 
 $ErrorActionPreference = "Stop"
 $here = $PSScriptRoot

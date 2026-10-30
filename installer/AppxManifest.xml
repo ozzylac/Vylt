@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Package identity for Vylt, required so Windows 11 can call it as a passkey provider
+     (the COM server in src/winplugin.rs). Build with installer\msix\build.ps1. -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10"
+  IgnorableNamespaces="uap uap10 rescap com">
+
+  <Identity Name="ozzylac.Vylt"
+            Publisher="CN=ozzylac"
+            Version="0.1.1.0"
+            ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Vylt</DisplayName>
+    <PublisherDisplayName>ozzylac</PublisherDisplayName>
+    <Logo>assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <!-- Plugin passkey APIs ship in Windows 11 24H2 / 25H2 with the late-2025 updates. -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.26100.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="fr-fr" />
+    <Resource Language="en-us" />
+    <Resource Language="es-es" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Vylt"
+                 Executable="vylt.exe"
+                 EntryPoint="Windows.FullTrustApplication"
+                 uap10:RuntimeBehavior="packagedClassicApp"
+                 uap10:TrustLevel="mediumIL">
+      <uap:VisualElements
+          DisplayName="Vylt"
+          Description="Gestionnaire de mots de passe Vylt"
+          BackgroundColor="transparent"
+          Square150x150Logo="assets\Square150x150Logo.png"
+          Square44x44Logo="assets\Square44x44Logo.png">
+      </uap:VisualElements>
+      <Extensions>
+        <!-- Registers the Vylt passkey authenticator COM class; Windows launches the exe
+             with -PluginActivated when it needs the provider. The CLSID matches winplugin::CLSID. -->
+        <com:Extension Category="windows.comServer">
+          <com:ComServer>
+            <com:ExeServer Executable="vylt.exe" Arguments="-PluginActivated" DisplayName="Vylt Passkeys">
+              <com:Class Id="ca87518c-8253-437f-b8ed-1e5a4a59f99a" DisplayName="Vylt Passkeys" />
+            </com:ExeServer>
+          </com:ComServer>
+        </com:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+</Package>
