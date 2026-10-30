@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Vylt — passkeys",
+  "version": "0.1.0",
+  "description": "Saves website passkeys in your Vylt vault and signs in with them.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsaK0cxFEETm4XJ4J6rhrE0pshELEfcioho14necGorgCMcYyI9UaGTOVjenQ8EiBPlaVr12jk7X2mYhDD51PEN2Oa2O3G/dLGJdX2fYaOraQeGhfv2k+EW+f1+jI3xsfxwh3hlflbcPA0tYfMRCQUMr7q1dP8g05B/Chckv6ASoApl0wVI6SYs3MrGCu5bR9EY9J/RXyn5nMZuJswxj3ukugNBH3FS+G6TbeaBtrENe7D6OfZ5ppnUjvBIRi3QovoVzEPGtCWA6efZZagKfmDCvpjqOGQLSz8GjaCLmVlIUfaSUrTb3qCTXeZ8532LwbwSEMteW7SmaryTVqgUPo6wIDAQAB",
+  "permissions": ["nativeMessaging"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    { "matches": ["https://*/*", "http://localhost/*"], "js": ["inject.js"], "run_at": "document_start", "world": "MAIN" },
+    { "matches": ["https://*/*", "http://localhost/*"], "js": ["content.js"], "run_at": "document_start" }
+  ],
+  "icons": { "128": "icon.png" }
+}

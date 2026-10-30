@@ -1,0 +1,36 @@
+[package]
+name = "vylt"
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "PolyForm-Noncommercial-1.0.0"
+
+[dependencies]
+arboard = "3.7.0"
+argon2 = "0.6.0"
+chacha20poly1305 = "0.11.0"
+csv = "1.4.0"
+eframe = "0.37.0"
+getrandom = "0.4.3"
+hkdf = "0.13.0"
+image = { version = "0.25.10", default-features = false, features = ["png", "jpeg", "ico"] }
+p256 = { version = "0.14.0", features = ["ecdsa", "pkcs8"] }
+png = { version = "0.18.1", optional = true }
+qrcode = { version = "0.14.1", default-features = false }
+raw-window-handle = "0.6.2"
+rfd = "0.17.2"
+rqrr = "0.11.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+sha1 = "0.11.0"
+sha2 = "0.11.1"
+totp-rs = { version = "6.0.0", features = ["otpauth"] }
+ureq = { version = "3.5.0", default-features = false, features = ["rustls"] }
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Storage_FileSystem", "Win32_Networking_WindowsWebServices", "Win32_Security", "Win32_Security_Authorization", "Win32_Security_Cryptography", "Win32_Storage_Packaging_Appx", "Win32_System_Com", "Win32_System_Diagnostics_ToolHelp", "Win32_System_IO", "Win32_System_LibraryLoader", "Win32_System_Pipes", "Win32_System_Registry", "Win32_System_RemoteDesktop", "Win32_System_Threading", "Win32_UI_WindowsAndMessaging"] }
+zeroize = { version = "1.9.1", features = ["serde", "zeroize_derive"] }
+
+[features]
+devshots = ["dep:png"]
+
+[build-dependencies]
+winresource = "0.1.34"

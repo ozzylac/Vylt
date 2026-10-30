@@ -1,0 +1,8 @@
+target/
+*.svault
+*.key
+maquettes/
+
+# Local editor files
+.vscode/
+.idea/
